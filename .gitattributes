@@ -1,0 +1,11 @@
+# Los archivos .php son datos de prueba del analizador lexico: se guardan
+# byte a byte (sin convertir CRLF/LF ni agregar salto de linea final),
+# porque el formato exacto es parte de lo que se evalua (R1, R2, R4).
+*.php -text
+
+# Codigo fuente y documentacion: normalizar saltos de linea
+*.java text
+*.txt  text
+*.md   text
+*.xml  text
+*.properties text
