@@ -4,7 +4,9 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.util.List;
 import proyectocompiladores1.errores.CodigoError;
+import proyectocompiladores1.errores.GestorErrores;
 import proyectocompiladores1.io.ArchivoFuente;
+import proyectocompiladores1.io.EscritorLog;
 import proyectocompiladores1.io.LectorArchivoPHP;
 import proyectocompiladores1.io.LocalizadorArchivo;
 
@@ -52,12 +54,20 @@ public class Main {
         }
 
         LectorArchivoPHP lector = new LectorArchivoPHP();
+        EscritorLog escritor = new EscritorLog();
         for (Path ruta : archivos) {
             try {
                 ArchivoFuente fuente = lector.leer(ruta);
                 System.out.println("Archivo leido: " + ruta.getFileName()
                         + " (" + fuente.getCantidadLineas() + " lineas, "
                         + fuente.getCodificacion() + ")");
+
+                // Las etapas de análisis (T05-T09) llenarán este gestor
+                GestorErrores errores = new GestorErrores();
+
+                Path log = escritor.escribir(fuente, errores);
+                System.out.println("  Log generado: " + log.getFileName()
+                        + " (" + errores.total() + " errores)");
             } catch (IOException e) {
                 System.out.println("Error " + CodigoError.ERROR_LECTURA.getNumero() + ". "
                         + CodigoError.ERROR_LECTURA.describir(ruta.getFileName(), e.getMessage()));
