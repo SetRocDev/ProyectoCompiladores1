@@ -1,0 +1,33 @@
+BATERIA DE PRUEBAS - cada archivo es una copia de CodigoProyecto.php con un error provocado a proposito.
+Como ejecutarla: copiar todos los archivos de esta carpeta junto al .jar (carpeta dist) y ejecutar
+    java -jar ProyectoCompiladores1.jar
+Se genera un archivo nombre-errores.log por cada .php; comparar sus errores con esta tabla.
+
+Archivo de prueba                    Errores esperados   Cambio respecto a CodigoProyecto.php (lineas del original)
+P00_original.php                     -                   Ninguno (codigo limpio de la catedra)
+P01_id_digito.php                    201                 L5:  $1nombre_estudiante = "Carlos";
+P02_id_simbolo.php                   202                 L6:  $-cantidad_notas = 4;
+P03_id_caracter_medio.php            203                 L16: $suma@notas = 0;
+P04_reservadas.php                   204 204             L35: $while = 0;   L43: $ECHO = "Proceso finalizado correctamente";
+P05_reservada_derecha.php            -                   L43: $mensaje_final = true;   (reservada a la DERECHA del =)
+P06_multiples_misma_linea.php        201 204             L6:  $1cantidad = 4; $if = 5;   (dos errores en una linea)
+P07_apertura_texto_previo.php        301                 Nueva primera linea: echo "";   antes de <?php
+P08_apertura_espacio.php             301                 L1:  " <?php"  (un espacio antes)
+P09_apertura_mal_escrita.php         302                 L1:  <? php
+P10_cierre_falta.php                 305                 Se borra L53 (?>)
+P11_cierre_mal_escrito.php           304                 L53: ? >
+P12_cierre_linea_siguiente.php       307                 Despues de ?> se agrega la linea: echo "hola";
+P13_cierre_salto_final.php           308                 Un salto de linea (Enter) despues de ?>
+P14_comentarios_validos.php          -                   L4: # $echo otro comentario valido   L9: ... // if while echo
+P15_comentario_continua.php          402                 Despues de L8 se agrega la linea: continua aqui
+P16_comentario_mal_formado.php       401                 L8:  / Arreglo de notas   (una sola barra)
+P17_cierre_misma_linea.php           306                 L53: ?> echo "hola";
+P18_cierre_espacios.php              308                 L53: "?>   "  (espacios despues de ?>)
+P19_errores_generales.php            501 502             L12: cadena sin comilla de cierre   L22: caracter @
+P20_id_sin_dolar.php                 206                 L5:  nombre_estudiante = "Carlos";   (sin el simbolo $)
+P21_id_guion_medio.php               203                 L6:  $cantidad-notas = 4;   (guion en medio del nombre)
+P22_apertura_sin_interrogacion.php   302                 L1:  <php   (falta el signo ?)
+P23_comentario_sin_marca.php         402                 L4:  Datos del estudiante   (se quito el # del comentario)
+X01_extension_mayuscula.PHP          (no se procesa)     Extension .PHP en mayuscula -> Error 102 en consola
+X02_extension_doble.php.txt          (no se procesa)     Extension .php.txt -> Error 102 en consola
+(carpeta sin .php)                   (no hay log)        Error 101 en consola
