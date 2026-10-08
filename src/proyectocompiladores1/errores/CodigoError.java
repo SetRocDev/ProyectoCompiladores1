@@ -30,7 +30,7 @@ public enum CodigoError {
     ID_CARACTER_INVALIDO(203, "El identificador '%s' contiene el carácter inválido '%s'; solo se permiten letras, dígitos y guion bajo"),
     ID_PALABRA_RESERVADA(204, "El identificador '%s' usa la palabra reservada '%s' y no puede ser asignado"),
     ID_SIN_NOMBRE(205, "Se encontró el símbolo '$' sin un nombre de identificador"),
-    ID_SIN_SIMBOLO_DOLAR(206, "El identificador '%s' no inicia con el símbolo '$'; debe escribirse '$%s'"),
+    ID_SIN_SIMBOLO_DOLAR(206, "El identificador '%s' no inicia con el símbolo '$'; todo identificador debe iniciar con '$' seguido de una letra o guion bajo"),
 
     // ===== 3xx: Etiquetas de apertura y cierre (R4) =====
     APERTURA_CONTENIDO_PREVIO(301, "Antes de la etiqueta de apertura '<?php' hay %s; la etiqueta debe ser lo primero del archivo"),
