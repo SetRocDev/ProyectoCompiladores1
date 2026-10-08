@@ -2,6 +2,7 @@ package proyectocompiladores1;
 
 import java.io.IOException;
 import java.nio.file.Path;
+import java.text.Normalizer;
 import java.util.List;
 import java.util.Map;
 import proyectocompiladores1.errores.CodigoError;
@@ -41,8 +42,8 @@ public class Main {
 
         LocalizadorArchivo localizador = new LocalizadorArchivo();
         Path carpeta = localizador.obtenerCarpetaDeEjecucion();
-        System.out.println("=== Analizador lexico PHP ===");
-        System.out.println("Carpeta: " + carpeta);
+        imprimir("=== Analizador lexico PHP ===");
+        imprimir("Carpeta: " + carpeta);
 
         List<Path> archivos;
         try {
@@ -68,8 +69,8 @@ public class Main {
 
     /** Ejecuta todas las etapas sobre un archivo y genera su log. */
     private static void analizarArchivo(Path ruta, boolean mostrarTokens) {
-        System.out.println();
-        System.out.println("Archivo: " + ruta.getFileName());
+        imprimir("");
+        imprimir("Archivo: " + ruta.getFileName());
         try {
             // Lectura respetando el formato original (R1)
             ArchivoFuente fuente = new LectorArchivoPHP().leer(ruta);
@@ -89,25 +90,38 @@ public class Main {
             Path log = new EscritorLog().escribir(fuente, errores);
 
             if (mostrarTokens) {
-                System.out.println("  LINEA:COL TIPO                 LEXEMA");
+                imprimir("  LINEA:COL TIPO                 LEXEMA");
                 for (Token token : tokens) {
-                    System.out.println("  " + token);
+                    imprimir("  " + token);
                 }
-                System.out.println("  Tabla de simbolos (distingue mayusculas):");
+                imprimir("  Tabla de simbolos (distingue mayusculas):");
                 for (Map.Entry<String, Integer> simbolo : validador.getTablaDeSimbolos().entrySet()) {
-                    System.out.println("    " + simbolo.getKey() + "  (linea " + simbolo.getValue() + ")");
+                    imprimir("    " + simbolo.getKey() + "  (linea " + simbolo.getValue() + ")");
                 }
             }
-            System.out.println("  Lineas: " + fuente.getCantidadLineas()
+            imprimir("  Lineas: " + fuente.getCantidadLineas()
                     + " | Tokens: " + tokens.size()
                     + " | Errores: " + errores.total());
-            System.out.println("  Log generado: " + log.getFileName());
+            imprimir("  Log generado: " + log.getFileName());
         } catch (IOException e) {
             mostrarError(CodigoError.ERROR_LECTURA, ruta.getFileName(), e.getMessage());
+        } catch (RuntimeException e) {
+            // Un fallo inesperado en un archivo no detiene el análisis de los demás
+            imprimir("  Error inesperado al analizar " + ruta.getFileName() + ": " + e);
         }
     }
 
     private static void mostrarError(CodigoError codigo, Object... datos) {
-        System.out.println("Error " + codigo.getNumero() + ". " + codigo.describir(datos));
+        imprimir("Error " + codigo.getNumero() + ". " + codigo.describir(datos));
+    }
+
+    /**
+     * Toda la salida de consola pasa por aquí. Cada consola de Windows (CMD,
+     * NetBeans, PowerShell) usa una codificación distinta y las tildes pueden
+     * verse como '?'; por eso en consola se muestran sin tildes. El .log sí
+     * conserva las tildes porque se escribe en UTF-8.
+     */
+    private static void imprimir(String texto) {
+        System.out.println(Normalizer.normalize(texto, Normalizer.Form.NFD).replaceAll("\\p{M}", ""));
     }
 }
