@@ -1,6 +1,7 @@
 package proyectocompiladores1.validacion;
 
 import java.util.List;
+import java.util.Locale;
 import java.util.Set;
 import proyectocompiladores1.errores.CodigoError;
 import proyectocompiladores1.errores.GestorErrores;
@@ -69,7 +70,8 @@ public class ValidadorComentarios {
     /**
      * Una PALABRA es código válido si es una llamada a función (le sigue "("),
      * un nombre después de class/function/new/->/::, o una palabra clave de
-     * PHP. En cualquier otro caso es texto suelto.
+     * PHP. Si le sigue "=" es un identificador sin '$', que reporta R3 (206).
+     * En cualquier otro caso es texto suelto.
      */
     private boolean esTextoSuelto(List<Token> tokens, int i) {
         Token token = tokens.get(i);
@@ -77,11 +79,11 @@ public class ValidadorComentarios {
             return false;
         }
         Token siguiente = vecinoEnLaLinea(tokens, i, +1);
-        if (siguiente != null && siguiente.getLexema().equals("(")) {
+        if (siguiente != null && (siguiente.getLexema().equals("(") || siguiente.es(TipoToken.ASIGNACION))) {
             return false;
         }
         Token anterior = vecinoEnLaLinea(tokens, i, -1);
-        return anterior == null || !ANTES_DE_UN_NOMBRE.contains(anterior.getLexema().toLowerCase());
+        return anterior == null || !ANTES_DE_UN_NOMBRE.contains(anterior.getLexema().toLowerCase(Locale.ROOT));
     }
 
     /** @return el token anterior (-1) o siguiente (+1) si está en la misma línea; si no, null. */
