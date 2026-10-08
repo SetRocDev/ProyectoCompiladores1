@@ -69,6 +69,7 @@ public class ValidadorComentarios {
 
     /**
      * Una PALABRA es código válido si es una llamada a función (le sigue "("),
+     * un nombre de clase (le sigue "::"),
      * un nombre después de class/function/new/->/::, o una palabra clave de
      * PHP. Si le sigue "=" es un identificador sin '$', que reporta R3 (206).
      * En cualquier otro caso es texto suelto.
@@ -79,7 +80,8 @@ public class ValidadorComentarios {
             return false;
         }
         Token siguiente = vecinoEnLaLinea(tokens, i, +1);
-        if (siguiente != null && (siguiente.getLexema().equals("(") || siguiente.es(TipoToken.ASIGNACION))) {
+        if (siguiente != null && (siguiente.getLexema().equals("(") || siguiente.getLexema().equals("::")
+                || siguiente.es(TipoToken.ASIGNACION))) {
             return false;
         }
         Token anterior = vecinoEnLaLinea(tokens, i, -1);
