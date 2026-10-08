@@ -28,7 +28,7 @@ public class ClasificadorTokens {
     public TipoToken tipoDe(String lexema) {
         char primero = lexema.charAt(0);
 
-        if (lexema.startsWith("<?")) {
+        if (lexema.startsWith("<?") || lexema.regionMatches(true, 0, "<php", 0, 4)) {
             return TipoToken.ETIQUETA_APERTURA;
         }
         if (primero == '?' && lexema.endsWith(">")) {
