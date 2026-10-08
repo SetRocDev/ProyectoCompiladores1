@@ -5,6 +5,7 @@ import proyectocompiladores1.errores.CodigoError;
 import proyectocompiladores1.errores.GestorErrores;
 import proyectocompiladores1.io.ArchivoFuente;
 import proyectocompiladores1.validacion.ValidadorComentarios;
+import proyectocompiladores1.validacion.ValidadorEtiquetas;
 
 /**
  * ===== ETAPA 4: VALIDACIÓN DEL LEXEMA =====
@@ -24,6 +25,7 @@ public class ValidadorLexema {
      */
     public void validar(List<Token> tokens, ArchivoFuente fuente, GestorErrores errores) {
         validarReglasGenerales(tokens, errores);
+        new ValidadorEtiquetas().validar(tokens, fuente, errores);      // R4
         new ValidadorComentarios().validar(tokens, errores);           // R5
     }
 

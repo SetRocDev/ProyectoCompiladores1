@@ -32,13 +32,13 @@ public enum CodigoError {
     ID_SIN_NOMBRE(205, "Se encontró el símbolo '$' sin un nombre de identificador"),
 
     // ===== 3xx: Etiquetas de apertura y cierre (R4) =====
-    APERTURA_CONTENIDO_PREVIO(301, "Se encontró contenido antes de la etiqueta de apertura '<?php': '%s'"),
+    APERTURA_CONTENIDO_PREVIO(301, "Antes de la etiqueta de apertura '<?php' hay %s; la etiqueta debe ser lo primero del archivo"),
     APERTURA_MAL_ESCRITA(302, "Etiqueta de apertura mal escrita '%s'; se esperaba exactamente '<?php'"),
     APERTURA_FALTANTE(303, "No se encontró la etiqueta de apertura '<?php' al inicio del archivo"),
     CIERRE_MAL_ESCRITO(304, "Etiqueta de cierre mal escrita '%s'; se esperaba exactamente '?>'"),
     CIERRE_FALTANTE(305, "No se encontró la etiqueta de cierre '?>' en el archivo"),
     CIERRE_CONTENIDO_POSTERIOR(306, "Se encontró contenido después de la etiqueta de cierre '?>': '%s'"),
-    CIERRE_NO_ES_ULTIMA_LINEA(307, "La etiqueta de cierre '?>' debe estar en la última línea del archivo"),
+    CIERRE_NO_ES_ULTIMA_LINEA(307, "La etiqueta de cierre '?>' no está en la última línea del archivo; después se encontró: '%s'"),
     CIERRE_ESPACIOS_POSTERIORES(308, "Hay %s después de la etiqueta de cierre '?>'; el archivo debe terminar exactamente en '?>'"),
 
     // ===== 4xx: Comentarios (R5) =====
