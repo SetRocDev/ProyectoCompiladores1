@@ -18,7 +18,7 @@ import proyectocompiladores1.io.ArchivoFuente;
  * Reglas de corte según el primer carácter del lexema:
  *   "//" o "#"       comentario hasta el final de la línea (su contenido no se divide)
  *   "/" al inicio    intento de comentario mal escrito (R5), hasta el final de la línea
- *   "<?"             intento de etiqueta de apertura (incluye "<? php")
+ *   "<?" o "<php"    intento de etiqueta de apertura (incluye "<? php")
  *   "?" ... ">"      intento de etiqueta de cierre (incluye "? >")
  *   comillas         cadena hasta la comilla de cierre
  *   "$"              identificador hasta un separador
@@ -86,9 +86,12 @@ public class AnalizadorLexico {
         if (c == '/' && linea.substring(0, i).isBlank() && !linea.startsWith("/=", i)) {
             return linea.length();
         }
-        // Etiquetas (R4)
+        // Etiquetas (R4). "<php" (sin '?') también se toma como intento de apertura
         if (linea.startsWith("<?", i)) {
             return finEtiquetaApertura(linea, i);
+        }
+        if (c == '<' && linea.regionMatches(true, i + 1, "php", 0, 3)) {
+            return i + 4;
         }
         if (c == '?') {
             int fin = finEtiquetaCierre(linea, i);
@@ -163,10 +166,20 @@ public class AnalizadorLexico {
             j++;
         }
         while (j < linea.length() && !Character.isWhitespace(linea.charAt(j))
-                && SEPARADORES_IDENTIFICADOR.indexOf(linea.charAt(j)) < 0) {
+                && (SEPARADORES_IDENTIFICADOR.indexOf(linea.charAt(j)) < 0 || esGuionDentroDelNombre(linea, j))) {
             j++;
         }
         return j;
+    }
+
+    /**
+     * Un '-' seguido de una letra o '_' (como en "$cantidad-notas") se toma
+     * como parte del identificador mal escrito, no como una resta, para
+     * reportar el identificador completo. "$a - $b" y "$i-1" siguen siendo restas.
+     */
+    private boolean esGuionDentroDelNombre(String linea, int j) {
+        return linea.charAt(j) == '-' && j + 1 < linea.length()
+                && (Character.isLetter(linea.charAt(j + 1)) || linea.charAt(j + 1) == '_');
     }
 
     private int finNumero(String linea, int i) {

@@ -24,6 +24,10 @@ P16_comentario_mal_formado.php       401                 L8:  / Arreglo de notas
 P17_cierre_misma_linea.php           306                 L53: ?> echo "hola";
 P18_cierre_espacios.php              308                 L53: "?>   "  (espacios despues de ?>)
 P19_errores_generales.php            501 502             L12: cadena sin comilla de cierre   L22: caracter @
+P20_id_sin_dolar.php                 206                 L5:  nombre_estudiante = "Carlos";   (sin el simbolo $)
+P21_id_guion_medio.php               203                 L6:  $cantidad-notas = 4;   (guion en medio del nombre)
+P22_apertura_sin_interrogacion.php   302                 L1:  <php   (falta el signo ?)
+P23_comentario_sin_marca.php         402                 L4:  Datos del estudiante   (se quito el # del comentario)
 X01_extension_mayuscula.PHP          (no se procesa)     Extension .PHP en mayuscula -> Error 102 en consola
 X02_extension_doble.php.txt          (no se procesa)     Extension .php.txt -> Error 102 en consola
 (carpeta sin .php)                   (no hay log)        Error 101 en consola

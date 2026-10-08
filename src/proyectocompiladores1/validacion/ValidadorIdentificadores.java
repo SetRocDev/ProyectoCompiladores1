@@ -17,6 +17,7 @@ import proyectocompiladores1.lexico.Token;
  *   \$[A-Za-z_][A-Za-z0-9_]*  (Patrones.IDENTIFICADOR). Si no lo cumple se
  *   indica la causa exacta: 201 dígito después de '$', 202 símbolo inválido
  *   después de '$', 203 carácter inválido dentro del nombre, 205 '$' solo.
+ *   Además, un nombre sin '$' a la izquierda de '=' es el Error 206.
  * Aspecto 2 (mayúsculas y minúsculas): la tabla de símbolos usa el lexema
  *   exacto como clave, por lo que $total y $Total son dos identificadores
  *   distintos.
@@ -71,13 +72,21 @@ public class ValidadorIdentificadores {
         }
     }
 
-    /** Aspecto 3: el identificador justo antes de '=' no puede ser una palabra reservada. */
+    /**
+     * Lo que está justo antes de '=':
+     *  - una palabra sin '$' (nombre_estudiante = ...): Error 206 (aspecto 1)
+     *  - un identificador que es palabra reservada ($if = ...): Error 204 (aspecto 3)
+     */
     private void validarLadoIzquierdo(List<Token> tokens, int posicionAsignacion, GestorErrores errores) {
         if (posicionAsignacion == 0) {
             return;
         }
         Token izquierdo = tokens.get(posicionAsignacion - 1);
         boolean mismaLinea = izquierdo.getLinea() == tokens.get(posicionAsignacion).getLinea();
+        if (mismaLinea && (izquierdo.es(TipoToken.PALABRA) || izquierdo.es(TipoToken.PALABRA_RESERVADA))) {
+            errores.registrar(CodigoError.ID_SIN_SIMBOLO_DOLAR, izquierdo.getLinea(), izquierdo.getColumna(),
+                    izquierdo.getLexema());
+        }
         if (mismaLinea && izquierdo.es(TipoToken.IDENTIFICADOR)) {
             String nombre = izquierdo.getLexema().substring(1);
             if (Patrones.esPalabraReservada(nombre)) {
