@@ -41,17 +41,15 @@ public class LectorArchivoPHP {
         boolean tieneBom = iniciaConBom(bytes);
         int inicio = tieneBom ? BOM_UTF8.length : 0;
 
-        Charset codificacion = StandardCharsets.UTF_8;
         String texto;
         try {
             texto = decodificarEstricto(bytes, inicio, StandardCharsets.UTF_8);
         } catch (CharacterCodingException e) {
-            codificacion = Charset.forName("windows-1252");
-            texto = new String(bytes, inicio, bytes.length - inicio, codificacion);
+            texto = new String(bytes, inicio, bytes.length - inicio, Charset.forName("windows-1252"));
         }
 
         return new ArchivoFuente(ruta, separarLineas(texto), terminaConSalto(texto),
-                tieneBom, detectarSeparador(texto), codificacion);
+                tieneBom, detectarSeparador(texto));
     }
 
     /**

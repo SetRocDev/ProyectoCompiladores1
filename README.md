@@ -24,6 +24,11 @@ cd dist
 copy ..\recursos\CodigoProyecto.php .
 java -jar ProyectoCompiladores1.jar
 ```
+`java -jar ProyectoCompiladores1.jar -tokens` muestra además la tabla de tokens y la tabla de símbolos.
+
+Pruebas: copiar `pruebas/*` a `dist/` y ejecutar el `.jar`. Se genera un log por archivo; la tabla de resultados esperados está en [pruebas/esperado.txt](pruebas/esperado.txt).
+
+Los pasos detallados, las decisiones de diseño y el uso de IA están en [INFORME.txt](INFORME.txt).
 
 ## Estructura
 ```

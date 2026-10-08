@@ -47,11 +47,6 @@ public final class ErrorLexico {
         return descripcion;
     }
 
-    /** @return true si el error no pertenece a una línea concreta del archivo. */
-    public boolean esGlobal() {
-        return linea == SIN_LINEA;
-    }
-
     /**
      * Formato del .log (Opción 1, el error va debajo de su línea):
      * {@code Error 201. El identificador '$1x' no puede iniciar con un dígito...}
