@@ -48,7 +48,7 @@ public enum CodigoError {
 
     // ===== 5xx: Errores léxicos generales =====
     CARACTER_NO_RECONOCIDO(501, "Carácter no reconocido '%s'"),
-    CADENA_SIN_CERRAR(502, "Cadena de texto sin cerrar: %s");
+    CADENA_SIN_CERRAR(502, "La cadena de texto %s no tiene la comilla de cierre");
 
     private final int numero;
     private final String plantilla;
