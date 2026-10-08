@@ -1,6 +1,7 @@
 package proyectocompiladores1.validacion;
 
 import java.util.List;
+import java.util.Locale;
 import java.util.Set;
 import proyectocompiladores1.errores.CodigoError;
 import proyectocompiladores1.errores.GestorErrores;
@@ -81,7 +82,7 @@ public class ValidadorComentarios {
             return false;
         }
         Token anterior = vecinoEnLaLinea(tokens, i, -1);
-        return anterior == null || !ANTES_DE_UN_NOMBRE.contains(anterior.getLexema().toLowerCase());
+        return anterior == null || !ANTES_DE_UN_NOMBRE.contains(anterior.getLexema().toLowerCase(Locale.ROOT));
     }
 
     /** @return el token anterior (-1) o siguiente (+1) si está en la misma línea; si no, null. */

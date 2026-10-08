@@ -1,6 +1,5 @@
 package proyectocompiladores1.io;
 
-import java.nio.charset.Charset;
 import java.nio.file.Path;
 import java.util.Collections;
 import java.util.List;
@@ -25,16 +24,14 @@ public final class ArchivoFuente {
     private final boolean terminaConSaltoDeLinea;
     private final boolean tieneBom;
     private final String separadorLinea;
-    private final Charset codificacion;
 
     public ArchivoFuente(Path ruta, List<String> lineas, boolean terminaConSaltoDeLinea,
-                         boolean tieneBom, String separadorLinea, Charset codificacion) {
+                         boolean tieneBom, String separadorLinea) {
         this.ruta = ruta;
         this.lineas = Collections.unmodifiableList(lineas);
         this.terminaConSaltoDeLinea = terminaConSaltoDeLinea;
         this.tieneBom = tieneBom;
         this.separadorLinea = separadorLinea;
-        this.codificacion = codificacion;
     }
 
     /** @return ruta completa del archivo leído. */
@@ -79,10 +76,5 @@ public final class ArchivoFuente {
     /** @return separador de línea usado en el archivo ("\r\n" o "\n"). */
     public String getSeparadorLinea() {
         return separadorLinea;
-    }
-
-    /** @return codificación con la que se pudo leer el archivo. */
-    public Charset getCodificacion() {
-        return codificacion;
     }
 }

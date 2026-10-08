@@ -87,9 +87,4 @@ public class GestorErrores {
         }
         return total;
     }
-
-    /** @return true si se registró al menos un error. */
-    public boolean hayErrores() {
-        return total() > 0;
-    }
 }
