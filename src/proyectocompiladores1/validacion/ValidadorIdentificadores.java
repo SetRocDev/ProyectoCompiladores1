@@ -83,7 +83,8 @@ public class ValidadorIdentificadores {
         }
         Token izquierdo = tokens.get(posicionAsignacion - 1);
         boolean mismaLinea = izquierdo.getLinea() == tokens.get(posicionAsignacion).getLinea();
-        if (mismaLinea && (izquierdo.es(TipoToken.PALABRA) || izquierdo.es(TipoToken.PALABRA_RESERVADA))) {
+        if (mismaLinea && (izquierdo.es(TipoToken.PALABRA) || izquierdo.es(TipoToken.PALABRA_RESERVADA))
+                && !esPropiedadOConstante(tokens, posicionAsignacion - 1)) {
             errores.registrar(CodigoError.ID_SIN_SIMBOLO_DOLAR, izquierdo.getLinea(), izquierdo.getColumna(),
                     izquierdo.getLexema());
         }
@@ -94,6 +95,21 @@ public class ValidadorIdentificadores {
                         izquierdo.getLexema(), nombre.toLowerCase(Locale.ROOT));
             }
         }
+    }
+
+    /**
+     * En PHP no llevan '$' las propiedades ($obj->valor = 1), los miembros
+     * estáticos (Clase::VALOR) ni las constantes (const MAX = 10). Por eso no
+     * son Error 206.
+     */
+    private boolean esPropiedadOConstante(List<Token> tokens, int posicionPalabra) {
+        if (posicionPalabra == 0) {
+            return false;
+        }
+        Token anterior = tokens.get(posicionPalabra - 1);
+        String lexema = anterior.getLexema().toLowerCase(Locale.ROOT);
+        return anterior.getLinea() == tokens.get(posicionPalabra).getLinea()
+                && (lexema.equals("->") || lexema.equals("::") || lexema.equals("const"));
     }
 
     /** Solo letras del alfabeto inglés (a-z, A-Z) o '_', como indica el enunciado. */
