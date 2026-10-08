@@ -3,6 +3,7 @@ package proyectocompiladores1;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.List;
+import java.util.Map;
 import proyectocompiladores1.errores.CodigoError;
 import proyectocompiladores1.errores.GestorErrores;
 import proyectocompiladores1.io.ArchivoFuente;
@@ -81,7 +82,8 @@ public class Main {
 
             // Etapa 4: validación de cada lexema según las reglas definidas
             GestorErrores errores = new GestorErrores();
-            new ValidadorLexema().validar(tokens, fuente, errores);
+            ValidadorLexema validador = new ValidadorLexema();
+            validador.validar(tokens, fuente, errores);
 
             // Archivo de errores (R2)
             Path log = new EscritorLog().escribir(fuente, errores);
@@ -90,6 +92,10 @@ public class Main {
                 System.out.println("  LINEA:COL TIPO                 LEXEMA");
                 for (Token token : tokens) {
                     System.out.println("  " + token);
+                }
+                System.out.println("  Tabla de simbolos (distingue mayusculas):");
+                for (Map.Entry<String, Integer> simbolo : validador.getTablaDeSimbolos().entrySet()) {
+                    System.out.println("    " + simbolo.getKey() + "  (linea " + simbolo.getValue() + ")");
                 }
             }
             System.out.println("  Lineas: " + fuente.getCantidadLineas()
