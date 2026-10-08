@@ -70,6 +70,8 @@ Es un analizador léxico, 100 % en consola, que:
        "ProyectoCompiladores1" (se reconoce como proyecto Java with Ant).
     2. Clic derecho en el proyecto > Clean and Build (Shift+F11).
        Se genera dist\ProyectoCompiladores1.jar.
+       IMPORTANTE: Clean and Build borra y vuelve a crear la carpeta "dist";
+       el .php se debe copiar a "dist" DESPUÉS de compilar.
     3. Seguir los pasos de la Opción A.
 
     Si se ejecuta con el botón Run de NetBeans (sin .jar), el programa
@@ -79,15 +81,15 @@ Es un analizador léxico, 100 % en consola, que:
 
 4. PRUEBAS INCLUIDAS
 -------------------------------------------------------------------------------
-La carpeta "pruebas" contiene 20 copias del código PHP de la cátedra, cada
-una con un error provocado a propósito (y 3 casos válidos que no deben dar
-error). El archivo pruebas\esperado.txt indica, para cada archivo, qué se
+La carpeta "pruebas" contiene 24 copias del código PHP de la cátedra: 21
+con un error provocado a propósito y 3 casos válidos que no deben dar
+error. El archivo pruebas\esperado.txt indica, para cada archivo, qué se
 cambió y qué error debe aparecer.
 
 Para ejecutarlas todas de una vez:
     1. Copiar todos los archivos de la carpeta "pruebas" a la carpeta "dist".
     2. Ejecutar:   java -jar ProyectoCompiladores1.jar
-    3. Se generan 20 archivos -errores.log; comparar con esperado.txt.
+    3. Se generan 24 archivos -errores.log; comparar con esperado.txt.
 
 
 5. FORMATO DEL ARCHIVO DE ERRORES (.log)
@@ -119,6 +121,7 @@ Para ejecutarlas todas de una vez:
     203  Carácter inválido dentro del nombre   ($suma@notas)
     204  Palabra reservada a la izquierda de = ($if = 10;)
     205  '$' sin nombre
+    206  Identificador sin '$' a la izquierda de = (nombre = "Carlos";)
   Etiquetas (R4)
     301  Texto, espacios, líneas en blanco o BOM antes de <?php
     302  Etiqueta de apertura mal escrita       (<? php)
@@ -130,7 +133,8 @@ Para ejecutarlas todas de una vez:
     308  Espacios o saltos de línea después de ?>
   Comentarios (R5)
     401  Comentario con una sola barra          (/ texto)
-    402  Texto suelto fuera de comentario       (comentario que "continúa")
+    402  Texto suelto que no es código PHP      (comentario que "continúa"
+                                                 o al que le falta // o #)
   Generales
     501  Carácter que no pertenece al lenguaje  (@)
     502  Cadena de texto sin comilla de cierre
@@ -205,8 +209,14 @@ Para ejecutarlas todas de una vez:
     JDK más nuevo y, sin este ajuste, el .jar no correría en equipos con
     Java 17 o 21.
   - Etiquetas: el analizador reconoce también las formas mal escritas
-    ("<? php", "? >") como intento de etiqueta, para poder compararlas con
-    la forma exacta y dar un mensaje específico.
+    ("<? php", "<php", "? >") como intento de etiqueta, para poder
+    compararlas con la forma exacta y dar un mensaje específico.
+  - Identificador sin '$': una palabra justo antes de "=" (por ejemplo
+    nombre_estudiante = "Carlos";) es un identificador que no inicia con
+    '$' (Error 206).
+  - Guion dentro del nombre: "$cantidad-notas" se reporta completo como
+    identificador con carácter inválido '-' (Error 203). Las restas con
+    espacios o entre variables ($a - $b, $i-1, $y-$z) no se afectan.
 
 
 9. LIMITACIONES CONOCIDAS
@@ -218,6 +228,8 @@ Para ejecutarlas todas de una vez:
     comentario mal escrito (Error 401), no como una división.
   - El contenido de las cadenas ("...$variable...") no se valida, porque es
     texto.
+  - Una resta sin espacios entre una variable y una palabra ($a-total) se
+    interpreta como un identificador con guion (Error 203).
 
 
 10. USO DE INTELIGENCIA ARTIFICIAL
@@ -258,6 +270,11 @@ Prompts principales cuyo resultado se incorporó al proyecto:
      sencilla pero funcional posible, debes hacer múltiples pruebas para
      estar completamente seguro que todo sirva ... debes considerar que se
      debe exponer por lo que debes hacerlo sencillo y funcional".
+  5. "Quiero también que recuerdes el pdf que te adjunte junto con el código
+     base ... revises minuciosamente las indicaciones ... además de la
+     rúbrica de evaluación para determinar si es un trabajo completo o hay
+     algún aspecto que se nos está escapando ... si algo falta actualicemos
+     los PR ... y volvamos a hacer pruebas minuciosas y variadas".
 
 
 11. FUENTES
