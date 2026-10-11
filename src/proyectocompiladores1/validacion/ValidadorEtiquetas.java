@@ -73,15 +73,15 @@ public class ValidadorEtiquetas {
                 .substring(cierre.getColumna() - 1 + cierre.getLexema().length());
         String siguienteConTexto = null;
         for (int n = linea + 1; n <= fuente.getCantidadLineas() && siguienteConTexto == null; n++) {
-            if (!fuente.getLinea(n).isBlank()) {
-                siguienteConTexto = fuente.getLinea(n).strip();
+            if (!fuente.getLinea(n).trim().isEmpty()) {
+                siguienteConTexto = fuente.getLinea(n).trim();
             }
         }
         boolean hayLineasDespues = linea < fuente.getCantidadLineas();
 
-        if (!restoDeLinea.isBlank()) {
+        if (!restoDeLinea.trim().isEmpty()) {
             errores.registrar(CodigoError.CIERRE_CONTENIDO_POSTERIOR, linea, cierre.getColumna() + 1,
-                    restoDeLinea.strip());
+                    restoDeLinea.trim());
         } else if (siguienteConTexto != null) {
             errores.registrar(CodigoError.CIERRE_NO_ES_ULTIMA_LINEA, linea, cierre.getColumna() + 1,
                     siguienteConTexto);
@@ -96,10 +96,10 @@ public class ValidadorEtiquetas {
 
     /** Describe lo que hay antes de la apertura: texto, espacios o líneas en blanco. */
     private String describirContenido(String contenido) {
-        if (!contenido.isBlank()) {
+        if (!contenido.trim().isEmpty()) {
             for (String linea : contenido.split("\n")) {
-                if (!linea.isBlank()) {
-                    return "el texto '" + linea.strip() + "'";
+                if (!linea.trim().isEmpty()) {
+                    return "el texto '" + linea.trim() + "'";
                 }
             }
         }

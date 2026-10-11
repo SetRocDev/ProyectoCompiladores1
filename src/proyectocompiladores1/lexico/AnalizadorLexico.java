@@ -83,7 +83,7 @@ public class AnalizadorLexico {
         }
         // Una línea que empieza con una sola '/' es un intento de comentario
         // mal escrito (no puede ser una división porque no hay nada antes)
-        if (c == '/' && linea.substring(0, i).isBlank() && !linea.startsWith("/=", i)) {
+        if (c == '/' && linea.substring(0, i).trim().isEmpty() && !linea.startsWith("/=", i)) {
             return linea.length();
         }
         // Etiquetas (R4). "<php" (sin '?') también se toma como intento de apertura

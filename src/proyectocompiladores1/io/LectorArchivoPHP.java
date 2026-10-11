@@ -9,6 +9,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -59,7 +60,7 @@ public class LectorArchivoPHP {
      * dato queda guardado en terminaConSaltoDeLinea.
      */
     private List<String> separarLineas(String texto) {
-        List<String> lineas = new ArrayList<>(List.of(texto.split("\r\n|\n|\r", -1)));
+        List<String> lineas = new ArrayList<>(Arrays.asList(texto.split("\r\n|\n|\r", -1)));
         if (terminaConSalto(texto)) {
             lineas.remove(lineas.size() - 1);
         }
