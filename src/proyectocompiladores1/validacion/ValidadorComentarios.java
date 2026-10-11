@@ -26,7 +26,7 @@ import proyectocompiladores1.lexico.Token;
 public class ValidadorComentarios {
 
     /** Palabras después de las cuales viene un nombre (de clase, función o miembro). */
-    private static final Set<String> ANTES_DE_UN_NOMBRE = Set.of("class", "function", "new", "->", "::");
+    private static final Set<String> ANTES_DE_UN_NOMBRE = Patrones.conjunto("class", "function", "new", "->", "::");
 
     public void validar(List<Token> tokens, GestorErrores errores) {
         validarFormaDeComentarios(tokens, errores);
@@ -38,7 +38,7 @@ public class ValidadorComentarios {
         for (Token token : tokens) {
             if (token.es(TipoToken.COMENTARIO) && !Patrones.COMENTARIO.matcher(token.getLexema()).matches()) {
                 errores.registrar(CodigoError.COMENTARIO_MAL_FORMADO, token.getLinea(), token.getColumna(),
-                        token.getLexema().strip());
+                        token.getLexema().trim());
             }
         }
     }

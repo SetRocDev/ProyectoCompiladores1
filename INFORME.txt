@@ -26,8 +26,11 @@ Es un analizador léxico, 100 % en consola, que:
 
 2. REQUISITOS
 -------------------------------------------------------------------------------
-  - Para ejecutar el .jar: Java 17 o superior.
-    Verificar en CMD con:   java -version
+  - Para ejecutar el .jar: Java 8 o superior (cualquier versión de Java
+    instalada sirve). Verificar en CMD con:   java -version
+    Si CMD responde que "java" no se reconoce, se puede usar el Java que
+    trae NetBeans escribiendo la ruta completa, por ejemplo:
+       "C:\Program Files\Apache NetBeans\jdk\bin\java" -jar ProyectoCompiladores1.jar
   - Para abrir y compilar: Apache NetBeans 24 o superior (trae su propio JDK).
   - No se usa ninguna librería externa (solo el JDK; las expresiones
     regulares son de java.util.regex, que es parte de Java).
@@ -205,9 +208,12 @@ Para ejecutarlas todas de una vez:
   - El .log se escribe en UTF-8 y conserva las tildes. En la consola los
     mensajes se muestran sin tildes, porque cada consola de Windows (CMD,
     NetBeans, PowerShell) usa una codificación distinta y podían verse '?'.
-  - Compilación para Java 17 (javac.source/target = 17): NetBeans trae un
-    JDK más nuevo y, sin este ajuste, el .jar no correría en equipos con
-    Java 17 o 21.
+  - Compilación para Java 8 (javac.source/target = 1.8): NetBeans trae un
+    JDK muy nuevo, pero el "java" del CMD en muchos equipos con Windows es
+    Java 8. Con este ajuste el .jar corre con cualquier Java desde la
+    versión 8. Se probó con Java 8 (1.8.0_503) y con Java 26. Por eso el
+    código no usa funciones posteriores a Java 8 (por ejemplo, se usa
+    trim().isEmpty() en lugar de isBlank()).
   - Etiquetas: el analizador reconoce también las formas mal escritas
     ("<? php", "<php", "? >") como intento de etiqueta, para poder
     compararlas con la forma exacta y dar un mensaje específico.

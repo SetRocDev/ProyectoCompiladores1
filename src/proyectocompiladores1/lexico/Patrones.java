@@ -1,5 +1,8 @@
 package proyectocompiladores1.lexico;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.Locale;
 import java.util.Set;
 import java.util.regex.Pattern;
@@ -19,6 +22,15 @@ import java.util.regex.Pattern;
 public final class Patrones {
 
     private Patrones() {
+    }
+
+    /**
+     * Crea un conjunto de solo lectura con los elementos indicados.
+     * Se usa en lugar de Set.of(...) para que el programa funcione desde
+     * Java 8, que es la versión que suele estar instalada en Windows.
+     */
+    public static Set<String> conjunto(String... elementos) {
+        return Collections.unmodifiableSet(new HashSet<>(Arrays.asList(elementos)));
     }
 
     /** Etiquetas exactas (R4). */
@@ -41,7 +53,7 @@ public final class Patrones {
     public static final Pattern PALABRA = Pattern.compile("[\\p{L}_][\\p{L}\\p{N}_]*");
 
     /** Las 20 palabras reservadas definidas por el enunciado (en minúscula). */
-    public static final Set<String> PALABRAS_RESERVADAS = Set.of(
+    public static final Set<String> PALABRAS_RESERVADAS = conjunto(
             "class", "function", "if", "while",
             "echo", "else", "continue", "for",
             "return", "public", "null", "false",
@@ -53,21 +65,21 @@ public final class Patrones {
      * No son reservadas para la regla R3, pero tampoco son "texto suelto"
      * (R5): son código PHP válido, por ejemplo "as" en un foreach.
      */
-    public static final Set<String> OTRAS_PALABRAS_CLAVE_PHP = Set.of(
+    public static final Set<String> OTRAS_PALABRAS_CLAVE_PHP = conjunto(
             "as", "and", "or", "xor", "new", "elseif", "break", "switch", "case",
             "default", "static", "global", "extends", "implements", "interface",
             "throw", "try", "catch", "finally", "instanceof", "var", "use",
             "namespace", "exit", "die", "endif", "endwhile", "endfor", "endforeach");
 
     /** Operadores (el '=' solo se considera ASIGNACIÓN, decisión Q5). */
-    public static final Set<String> OPERADORES = Set.of(
+    public static final Set<String> OPERADORES = conjunto(
             "===", "!==", "==", "!=", "<>", "<=", ">=", "<", ">",
             "+", "-", "*", "/", "%", ".", "!", "?", ":",
             "++", "--", "+=", "-=", "*=", "/=", ".=", "&&", "||", "->", "=>", "::");
 
     public static final String ASIGNACION = "=";
 
-    public static final Set<String> DELIMITADORES = Set.of(";", ",", "(", ")", "{", "}", "[", "]");
+    public static final Set<String> DELIMITADORES = conjunto(";", ",", "(", ")", "{", "}", "[", "]");
 
     /**
      * Decisión Q5: las palabras reservadas se comparan sin distinguir
