@@ -1,6 +1,5 @@
 # NetBeans (Java with Ant): salidas de compilacion
 /build/
-/dist/
 /nbproject/private/
 
 # Logs generados por el analizador al ejecutar pruebas

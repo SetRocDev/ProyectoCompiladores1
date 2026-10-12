@@ -1,292 +1,342 @@
 ===============================================================================
  INFORME - PROYECTO 1: ANALIZADOR LÉXICO DE PHP EN JAVA
 ===============================================================================
- Universidad Estatal a Distancia (UNED) - Cátedra Tecnología de Sistemas
- Curso:        03307 Compiladores
- Proyecto:     Proyecto 1 (III Cuatrimestre 2026)
+ Curso:        03307 Compiladores - UNED
+ Proyecto:     Proyecto 1, III Cuatrimestre 2026
  Estudiante:   Pablo Cortés
  Repositorio:  https://github.com/SetRocDev/ProyectoCompiladores1
 ===============================================================================
 
+ CONTENIDO
+    1. Qué hace el programa
+    2. Qué se necesita
+    3. Cómo ejecutarlo (paso a paso)
+    4. Cómo leer el resultado
+    5. Cómo probar que detecta errores
+    6. Cómo compilarlo en NetBeans
+    7. Problemas frecuentes y su solución
+    8. Lista de errores que detecta
+    9. Cómo está organizado el código
+   10. Decisiones tomadas
+   11. Limitaciones
+   12. Uso de inteligencia artificial
+   13. Fuentes
+
 
 1. QUÉ HACE EL PROGRAMA
 -------------------------------------------------------------------------------
-Es un analizador léxico, 100 % en consola, que:
-  1. Busca los archivos con extensión exactamente ".php" que están en la
-     misma carpeta del archivo .jar (no depende de un nombre ni de una ruta
-     fija).
-  2. Lee cada archivo respetando su formato original (espacios, tabulaciones,
-     líneas en blanco, saltos de línea).
-  3. Ejecuta las etapas del análisis léxico: obtención de tokens,
-     clasificación, determinación del patrón y validación del lexema.
-  4. Genera, junto al .php, el archivo "nombreArchivo-errores.log": una
-     copia exacta del .php con cada línea numerada (0001, 0002, ...) y los
-     errores escritos justo debajo de la línea donde se encontraron.
+El programa revisa un archivo de código PHP y busca errores de escritura
+(errores léxicos). Trabaja así:
+
+  1. Busca los archivos que terminan en ".php" en la misma carpeta donde
+     está el programa.
+  2. Lee cada archivo sin cambiarle nada.
+  3. Revisa tres cosas:
+        - los nombres de las variables (identificadores),
+        - las etiquetas de inicio y fin de PHP:  <?php  y  ?>
+        - los comentarios:  //  y  #
+  4. Crea un archivo nuevo con el mismo nombre, terminado en "-errores.log".
+     Ese archivo es una copia del .php con cada línea numerada. Debajo de
+     cada línea que tiene un problema aparece el error encontrado.
+
+El programa funciona solo en consola (la ventana negra de comandos). No tiene
+ventanas ni botones.
 
 
-2. REQUISITOS
+2. QUÉ SE NECESITA
 -------------------------------------------------------------------------------
-  - Para ejecutar el .jar: Java 8 o superior (cualquier versión de Java
-    instalada sirve). Verificar en CMD con:   java -version
-    Si CMD responde que "java" no se reconoce, se puede usar el Java que
-    trae NetBeans escribiendo la ruta completa, por ejemplo:
-       "C:\Program Files\Apache NetBeans\jdk\bin\java" -jar ProyectoCompiladores1.jar
-  - Para abrir y compilar: Apache NetBeans 24 o superior (trae su propio JDK).
-  - No se usa ninguna librería externa (solo el JDK; las expresiones
-    regulares son de java.util.regex, que es parte de Java).
-  - Tipo de proyecto: "Java with Ant".
+  - Una computadora con Windows.
+  - Java instalado, versión 8 o más nueva. La mayoría de las computadoras ya
+    lo tienen.
+    Para comprobarlo: abrir el Símbolo del sistema (CMD), escribir
+        java -version
+    y presionar Enter. Debe aparecer un número de versión.
+  - Solo para ver o compilar el código: Apache NetBeans 24 o superior.
+
+No se usa ninguna librería externa. El proyecto es de tipo "Java with Ant".
 
 
-3. PASOS PARA EJECUTAR EL PROGRAMA (CMD)
+3. CÓMO EJECUTARLO (PASO A PASO)
 -------------------------------------------------------------------------------
-  Opción A - usar el .jar ya compilado:
+El programa ya viene compilado en la carpeta "dist", junto con el archivo PHP
+de ejemplo. No hace falta compilar nada para probarlo.
 
-    1. Abrir el símbolo del sistema (CMD).
-    2. Ir a la carpeta "dist" del proyecto, por ejemplo:
-           cd C:\ruta\ProyectoCompiladores1\dist
-    3. Copiar en esa misma carpeta el archivo .php que se quiere analizar.
-       Puede tener cualquier nombre, por ejemplo:
-           copy ..\recursos\CodigoProyecto.php .
-    4. Ejecutar:
-           java -jar ProyectoCompiladores1.jar
-    5. Abrir el archivo generado en la misma carpeta:
-           CodigoProyecto-errores.log
-       (en general: nombreDelArchivo-errores.log)
+  Paso 1. Abrir la carpeta del proyecto y entrar a la carpeta "dist".
+          Ahí hay dos archivos:
+              ProyectoCompiladores1.jar   (el programa)
+              CodigoProyecto.php          (el código PHP que se va a revisar)
 
-    Opcional: para ver además la tabla de tokens y la tabla de símbolos en
-    consola (evidencia de las etapas del análisis):
-           java -jar ProyectoCompiladores1.jar -tokens
+  Paso 2. Abrir el Símbolo del sistema (CMD) en esa carpeta.
+          Forma fácil: en el Explorador de archivos, hacer clic en la barra
+          de direcciones (donde aparece la ruta de la carpeta), escribir
+              cmd
+          y presionar Enter. Se abre una ventana negra ubicada en "dist".
 
-    Notas:
-      - Si hay varios .php en la carpeta, se analizan todos y cada uno
-        genera su propio log.
-      - Si no hay ningún .php, se muestra en consola:
-           Error 101. No se encontro ningun archivo con extension .php ...
-      - Los archivos con otra extensión (.PHP, .php.txt, .phtml) no se
-        analizan; se informa en consola con el Error 102.
-      - El comando puede ejecutarse desde cualquier carpeta indicando la
-        ruta del .jar: el programa siempre busca los .php junto al .jar.
+  Paso 3. Escribir este comando y presionar Enter:
+              java -jar ProyectoCompiladores1.jar
 
-  Opción B - compilar desde NetBeans:
+  Paso 4. En la ventana aparece un resumen parecido a este:
+              === Analizador lexico PHP ===
+              Carpeta: C:\...\ProyectoCompiladores1\dist
 
-    1. NetBeans > File > Open Project > seleccionar la carpeta
-       "ProyectoCompiladores1" (se reconoce como proyecto Java with Ant).
-    2. Clic derecho en el proyecto > Clean and Build (Shift+F11).
-       Se genera dist\ProyectoCompiladores1.jar.
-       IMPORTANTE: Clean and Build borra y vuelve a crear la carpeta "dist";
-       el .php se debe copiar a "dist" DESPUÉS de compilar.
-    3. Seguir los pasos de la Opción A.
+              Archivo: CodigoProyecto.php
+                Lineas: 53 | Tokens: 148 | Errores: 0
+                Log generado: CodigoProyecto-errores.log
 
-    Si se ejecuta con el botón Run de NetBeans (sin .jar), el programa
-    busca los .php en la carpeta raíz del proyecto; para probar así, copiar
-    el .php a esa carpeta.
+  Paso 5. En la carpeta "dist" aparece un archivo nuevo:
+              CodigoProyecto-errores.log
+          Abrirlo con el Bloc de notas para ver el resultado.
+
+  Para revisar otro archivo PHP:
+     Copiarlo a la carpeta "dist" y repetir el paso 3. Puede tener cualquier
+     nombre, siempre que termine en ".php". Si hay varios archivos .php, el
+     programa los revisa todos y crea un archivo .log para cada uno.
+
+  Opcional, para ver más detalle:
+              java -jar ProyectoCompiladores1.jar -tokens
+     Muestra además la lista de tokens (cada palabra o símbolo encontrado y
+     su tipo) y la lista de variables encontradas.
 
 
-4. PRUEBAS INCLUIDAS
+4. CÓMO LEER EL RESULTADO
 -------------------------------------------------------------------------------
-La carpeta "pruebas" contiene 24 copias del código PHP de la cátedra: 21
-con un error provocado a propósito y 3 casos válidos que no deben dar
-error. El archivo pruebas\esperado.txt indica, para cada archivo, qué se
-cambió y qué error debe aparecer.
+El archivo "-errores.log" es una copia exacta del .php, con dos agregados:
 
-Para ejecutarlas todas de una vez:
-    1. Copiar todos los archivos de la carpeta "pruebas" a la carpeta "dist".
-    2. Ejecutar:   java -jar ProyectoCompiladores1.jar
-    3. Se generan 24 archivos -errores.log; comparar con esperado.txt.
+  - Cada línea empieza con su número, de 4 dígitos, y un espacio.
+  - Si una línea tiene un error, el error aparece en el renglón de abajo, con
+    este formato:   Error NÚMERO. Descripción
 
+Ejemplo de una línea con dos errores:
 
-5. FORMATO DEL ARCHIVO DE ERRORES (.log)
--------------------------------------------------------------------------------
-  - Cada línea del .php se copia sin cambios, precedida por 4 dígitos y un
-    espacio:  "0001 <?php"
-  - Opción elegida: los errores van INMEDIATAMENTE DEBAJO de la línea donde
-    se detectan (Opción 1 del enunciado), con el formato:
-        Error NNN. Descripción específica
-  - Si una línea tiene varios errores, se escribe uno por renglón.
-  - Los errores que no pertenecen a una línea (por ejemplo, que falte la
-    etiqueta de cierre) se escriben al final del archivo.
-
-  Ejemplo:
+    0005 $nombre_estudiante = "Carlos";
     0006 $1cantidad = 4; $if = 5;
     Error 201. El identificador '$1cantidad' no puede iniciar con un dígito después de '$'
     Error 204. El identificador '$if' usa la palabra reservada 'if' y no puede ser asignado
+    0007
+
+Los errores que no pertenecen a una línea (por ejemplo, que falte la etiqueta
+de cierre ?>) aparecen al final del archivo.
 
 
-6. CATÁLOGO DE ERRORES
+5. CÓMO PROBAR QUE DETECTA ERRORES
 -------------------------------------------------------------------------------
-  Archivo (se muestran en consola)
-    101  No hay ningún archivo .php en la carpeta del .jar
-    102  Archivo con extensión distinta a .php exacta (no se analiza)
+  Forma 1: modificar el archivo de ejemplo.
+     1. Abrir  dist\CodigoProyecto.php  con el Bloc de notas.
+     2. Cambiar algo. Por ejemplo, en la línea 6, cambiar
+            $cantidad_notas = 4;      por      $1cantidad = 4;
+     3. Guardar el archivo.
+     4. Ejecutar de nuevo:   java -jar ProyectoCompiladores1.jar
+     5. Abrir el .log: debajo de la línea 6 aparece el Error 201.
+
+  Forma 2: usar las pruebas incluidas.
+     La carpeta "pruebas" tiene 24 copias del archivo de ejemplo. Cada una
+     tiene un error puesto a propósito (3 de ellas no tienen errores, para
+     comprobar que el programa no marca errores falsos).
+     1. Copiar todos los archivos de la carpeta "pruebas" a la carpeta "dist".
+     2. Ejecutar:   java -jar ProyectoCompiladores1.jar
+     3. Se crea un archivo .log por cada archivo .php.
+     4. El archivo  pruebas\esperado.txt  indica qué se cambió en cada prueba
+        y qué error debe aparecer.
+
+
+6. CÓMO COMPILARLO EN NETBEANS
+-------------------------------------------------------------------------------
+Este paso es opcional: el programa ya viene compilado en "dist".
+
+  1. Abrir NetBeans.
+  2. Menú File > Open Project y elegir la carpeta del proyecto.
+  3. Hacer clic derecho sobre el proyecto y elegir "Clean and Build"
+     (o presionar Shift + F11). Al terminar debe decir BUILD SUCCESSFUL.
+  4. IMPORTANTE: "Clean and Build" borra todo lo que hay en la carpeta
+     "dist" y crea de nuevo el archivo .jar. Por eso, después de compilar,
+     hay que copiar otra vez el archivo PHP:
+         copiar  recursos\CodigoProyecto.php  a la carpeta  dist
+  5. Ejecutar como se explica en la sección 3.
+
+
+7. PROBLEMAS FRECUENTES Y SU SOLUCIÓN
+-------------------------------------------------------------------------------
+  "java" no se reconoce como un comando
+     La computadora no encuentra Java. Se puede usar el Java que trae
+     NetBeans, escribiendo la ruta completa entre comillas:
+     "C:\Program Files\Apache NetBeans\jdk\bin\java" -jar ProyectoCompiladores1.jar
+
+  Aparece: Error 101. No se encontro ningun archivo con extension .php
+     No hay ningún archivo .php en la carpeta "dist". Copiar ahí el archivo
+     recursos\CodigoProyecto.php y ejecutar de nuevo.
+
+  Aparece: Error 102. El archivo '...' no tiene la extension exacta .php
+     Es solo un aviso. El programa revisa únicamente archivos que terminan
+     en ".php" en minúscula. Un archivo ".PHP" o ".php.txt" no se revisa.
+
+  En la ventana de comandos las palabras salen sin tildes
+     Es a propósito. La ventana de comandos de Windows no siempre muestra
+     bien las tildes, así que ahí se escriben sin tilde. En el archivo .log
+     las tildes sí aparecen.
+
+  Compilé en NetBeans y ya no está el archivo PHP en "dist"
+     Es normal: "Clean and Build" vacía la carpeta. Copiar de nuevo
+     recursos\CodigoProyecto.php a "dist".
+
+
+8. LISTA DE ERRORES QUE DETECTA
+-------------------------------------------------------------------------------
+  Sobre el archivo (se muestran en la ventana de comandos)
+    101  No hay ningún archivo .php en la carpeta
+    102  El archivo no termina exactamente en .php (no se revisa)
     103  No se pudo leer el archivo
-  Identificadores (R3)
-    201  Dígito después de '$'                 ($1variable)
-    202  Símbolo inválido después de '$'       ($-dato)
-    203  Carácter inválido dentro del nombre   ($suma@notas)
-    204  Palabra reservada a la izquierda de = ($if = 10;)
-    205  '$' sin nombre
-    206  Identificador sin '$' a la izquierda de = (nombre = "Carlos";)
-  Etiquetas (R4)
-    301  Texto, espacios, líneas en blanco o BOM antes de <?php
-    302  Etiqueta de apertura mal escrita       (<? php)
-    303  No existe la etiqueta de apertura
-    304  Etiqueta de cierre mal escrita         (? >)
-    305  No existe la etiqueta de cierre
-    306  Código después de ?> en la misma línea
-    307  ?> no está en la última línea (hay código en líneas siguientes)
-    308  Espacios o saltos de línea después de ?>
-  Comentarios (R5)
-    401  Comentario con una sola barra          (/ texto)
-    402  Texto suelto que no es código PHP      (comentario que "continúa"
-                                                 o al que le falta // o #)
+
+  Sobre los identificadores (nombres de variables)
+    201  Hay un número justo después de $           Ejemplo: $1variable
+    202  Hay un símbolo justo después de $          Ejemplo: $-dato
+    203  Hay un carácter no permitido en el nombre  Ejemplo: $suma@notas
+    204  Se usa una palabra reservada como nombre   Ejemplo: $if = 10;
+    205  Hay un $ sin nombre                        Ejemplo: $ = 5;
+    206  Falta el $ al inicio del nombre            Ejemplo: nombre = "Ana";
+
+  Sobre las etiquetas <?php y ?>
+    301  Hay algo antes de <?php (texto, espacios o líneas en blanco)
+    302  La etiqueta de inicio está mal escrita     Ejemplo: <? php
+    303  No existe la etiqueta de inicio <?php
+    304  La etiqueta de cierre está mal escrita     Ejemplo: ? >
+    305  No existe la etiqueta de cierre ?>
+    306  Hay código después de ?> en la misma línea
+    307  La etiqueta ?> no está en la última línea
+    308  Hay espacios o líneas en blanco después de ?>
+
+  Sobre los comentarios
+    401  Comentario con una sola barra              Ejemplo: / texto
+    402  Texto suelto que no es código (por ejemplo, un comentario que
+         continúa en la línea siguiente sin // ni #)
+
   Generales
-    501  Carácter que no pertenece al lenguaje  (@)
-    502  Cadena de texto sin comilla de cierre
+    501  Carácter que no pertenece al lenguaje      Ejemplo: @
+    502  Texto entre comillas sin cerrar            Ejemplo: echo "hola;
 
 
-7. ESTRUCTURA DEL CÓDIGO Y ETAPAS DEL ANÁLISIS LÉXICO
+9. CÓMO ESTÁ ORGANIZADO EL CÓDIGO
 -------------------------------------------------------------------------------
-  src/proyectocompiladores1/
-    Main.java                        Orquesta el flujo completo (ver abajo)
-    io/
-      LocalizadorArchivo.java        Busca los .php junto al .jar        (R1)
-      LectorArchivoPHP.java          Lee respetando el formato           (R1)
-      ArchivoFuente.java             Contenido + datos de formato
-      EscritorLog.java               Genera nombre-errores.log           (R2)
-    lexico/
-      TipoToken.java                 Tipos de token
-      Token.java                     Lexema + tipo + línea + columna
-      AnalizadorLexico.java          ETAPA 1: OBTENCIÓN DE TOKENS
-      ClasificadorTokens.java        ETAPA 2: CLASIFICACIÓN DE TOKENS
-      Patrones.java                  ETAPA 3: DETERMINACIÓN DEL PATRÓN
-      ValidadorLexema.java           ETAPA 4: VALIDACIÓN DEL LEXEMA
-    validacion/
-      ValidadorIdentificadores.java  Reglas de R3 (las usa la etapa 4)
-      ValidadorEtiquetas.java        Reglas de R4 (las usa la etapa 4)
-      ValidadorComentarios.java      Reglas de R5 (las usa la etapa 4)
-    errores/
-      CodigoError.java               Catálogo de errores
-      ErrorLexico.java               Un error concreto
-      GestorErrores.java             Acumula los errores (varios por línea)
+El código está en la carpeta  src\proyectocompiladores1  y se divide en cuatro
+grupos (paquetes). Cada archivo cumple una sola tarea.
 
-  Flujo para cada archivo (Main.analizarArchivo):
-    1. LectorArchivoPHP lee el archivo.
-    2. ETAPA 1 - AnalizadorLexico recorre cada línea carácter por carácter
-       y corta los lexemas. Solo corta: un identificador mal formado como
-       "$1variable" se corta completo para poder reportarlo tal cual.
-    3. ETAPA 2 - ClasificadorTokens asigna a cada lexema su tipo según cómo
-       empieza (por ejemplo, '$' = identificador; comillas = cadena; una
-       palabra de la lista = palabra reservada).
-    4. ETAPA 3 - Patrones contiene las reglas: expresiones regulares (por
-       ejemplo  \$[A-Za-z_][A-Za-z0-9_]*  para identificadores) y las listas
-       de palabras reservadas, operadores y delimitadores.
-    5. ETAPA 4 - ValidadorLexema comprueba que cada lexema cumpla su patrón
-       y las reglas de R3, R4 y R5 (cada una en su validador).
-    6. EscritorLog escribe el .log con las líneas numeradas y los errores.
+  Main.java                          Dirige todo: llama a cada parte en orden.
+
+  io (leer y escribir archivos)
+    LocalizadorArchivo.java          Busca los archivos .php junto al programa.
+    LectorArchivoPHP.java            Lee el archivo sin cambiarle nada.
+    ArchivoFuente.java               Guarda las líneas leídas.
+    EscritorLog.java                 Crea el archivo -errores.log.
+
+  lexico (las 4 etapas del análisis léxico)
+    AnalizadorLexico.java            ETAPA 1. Obtención de tokens: recorre cada
+                                     línea letra por letra y la separa en
+                                     pedazos (lexemas).
+    ClasificadorTokens.java          ETAPA 2. Clasificación: dice de qué tipo
+                                     es cada pedazo (variable, número, texto,
+                                     palabra reservada, comentario...).
+    Patrones.java                    ETAPA 3. Patrón: tiene las reglas de cada
+                                     tipo y la lista de palabras reservadas.
+    ValidadorLexema.java             ETAPA 4. Validación: revisa que cada
+                                     pedazo cumpla sus reglas.
+    Token.java, TipoToken.java       Representan un token y sus tipos.
+
+  validacion (las reglas que revisa la etapa 4)
+    ValidadorIdentificadores.java    Reglas de los nombres de variables.
+    ValidadorEtiquetas.java          Reglas de <?php y ?>.
+    ValidadorComentarios.java        Reglas de los comentarios.
+
+  errores
+    CodigoError.java                 La lista de errores con su número.
+    ErrorLexico.java                 Un error encontrado.
+    GestorErrores.java               Guarda los errores de cada línea.
+
+Orden en que trabaja el programa con cada archivo .php:
+    leer  ->  etapa 1  ->  etapa 2  ->  etapa 4 (usa las reglas de la etapa 3)
+          ->  escribir el archivo .log
 
 
-8. DECISIONES DE DISEÑO
+10. DECISIONES TOMADAS
 -------------------------------------------------------------------------------
-  - Archivos a analizar: todos los ".php" (exacto, en minúscula) de la
-    carpeta del .jar. Sin .php: Error 101 en consola y no se genera log.
-  - Ubicación de errores: Opción 1 (debajo de cada línea), porque en un
-    entorno real es más fácil corregir viendo el error junto a su línea.
-  - Numeración: 4 dígitos y un espacio ("0001 ").
-  - Palabras reservadas: se comparan SIN distinguir mayúsculas ($IF y $If
-    también son error), porque en PHP las palabras clave no distinguen
-    mayúsculas. Los identificadores SÍ distinguen mayúsculas entre sí:
-    $total y $Total son distintos (tabla de símbolos con clave exacta).
-  - Solo el "=" simple es asignación; "==", "===", ">=", "<=" y "!=" son
-    comparaciones y no activan la regla de palabras reservadas.
-  - Texto suelto (402): una palabra que no es palabra reservada, no está
-    entre comillas, no es una llamada a función (por ejemplo array(...)),
-    ni otra palabra clave de PHP (as, new...), se considera texto que quedó
-    fuera de un comentario.
-  - Lectura del archivo: se lee completo (no línea por línea) para conocer
-    si termina con salto de línea, qué separador usa (CRLF/LF) y si tiene
-    BOM; esos datos son necesarios para validar las etiquetas (R4).
-    Codificación UTF-8, con respaldo Windows-1252 (archivos "ANSI").
-  - El .log se escribe en UTF-8 y conserva las tildes. En la consola los
-    mensajes se muestran sin tildes, porque cada consola de Windows (CMD,
-    NetBeans, PowerShell) usa una codificación distinta y podían verse '?'.
-  - Compilación para Java 8 (javac.source/target = 1.8): NetBeans trae un
-    JDK muy nuevo, pero el "java" del CMD en muchos equipos con Windows es
-    Java 8. Con este ajuste el .jar corre con cualquier Java desde la
-    versión 8. Se probó con Java 8 (1.8.0_503) y con Java 26. Por eso el
-    código no usa funciones posteriores a Java 8 (por ejemplo, se usa
-    trim().isEmpty() en lugar de isBlank()).
-  - Etiquetas: el analizador reconoce también las formas mal escritas
-    ("<? php", "<php", "? >") como intento de etiqueta, para poder
-    compararlas con la forma exacta y dar un mensaje específico.
-  - Identificador sin '$': una palabra justo antes de "=" (por ejemplo
-    nombre_estudiante = "Carlos";) es un identificador que no inicia con
-    '$' (Error 206).
-  - Guion dentro del nombre: "$cantidad-notas" se reporta completo como
-    identificador con carácter inválido '-' (Error 203). Las restas con
-    espacios o entre variables ($a - $b, $i-1, $y-$z) no se afectan.
+  - Archivos que se revisan: todos los que terminan en ".php" y están junto
+    al programa. Así no depende de un nombre ni de una ruta fija.
+  - Dónde se muestran los errores: debajo de la línea donde ocurren (Opción 1
+    del enunciado), porque es más fácil de corregir.
+  - Numeración: 4 dígitos y un espacio. Ejemplo: "0001 <?php"
+  - Mayúsculas y minúsculas en las variables: $total y $Total son dos
+    variables distintas.
+  - Palabras reservadas: no se distinguen mayúsculas, porque en PHP "IF" y
+    "if" son la misma palabra. Por eso $if, $If y $IF son error.
+  - La regla de palabras reservadas se aplica a la variable que está a la
+    izquierda del signo "=". Los signos "==", ">=", "<=" y "!=" son
+    comparaciones, no asignaciones.
+  - Lectura del archivo: se lee completo y no línea por línea, para saber si
+    hay algo antes de <?php o después de ?> (por ejemplo, un Enter al final).
+  - Versión de Java: el programa se compila para Java 8, para que funcione
+    en cualquier computadora, tenga un Java viejo o nuevo. Se probó con
+    Java 8 y con Java 26.
+  - Tildes: en la ventana de comandos se escriben sin tilde; en el archivo
+    .log sí se conservan.
 
 
-9. LIMITACIONES CONOCIDAS
+11. LIMITACIONES
 -------------------------------------------------------------------------------
-  - Solo se analizan comentarios de una línea (// y #), como pide el
-    enunciado; los comentarios de bloque /* */ no se reconocen.
-  - Las cadenas de texto deben abrir y cerrar en la misma línea.
-  - Una línea que empieza con una sola "/" se interpreta como un intento de
-    comentario mal escrito (Error 401), no como una división.
-  - El contenido de las cadenas ("...$variable...") no se valida, porque es
-    texto.
-  - Una resta sin espacios entre una variable y una palabra ($a-total) se
-    interpreta como un identificador con guion (Error 203).
+  - Solo se revisan comentarios de una línea (// y #), como pide el enunciado.
+    Los comentarios de varias líneas /* */ no se reconocen.
+  - Un texto entre comillas debe empezar y terminar en la misma línea.
+  - Una línea que empieza con una sola barra "/" se toma como un comentario
+    mal escrito.
+  - El contenido de los textos entre comillas no se revisa.
+  - Una resta escrita sin espacios entre una variable y una palabra ($a-total)
+    se toma como un nombre de variable con guion (Error 203).
+  - El programa no revisa la gramática. Por ejemplo, si falta un punto y coma
+    no lo reporta, porque eso no es un error léxico.
 
 
-10. USO DE INTELIGENCIA ARTIFICIAL
+12. USO DE INTELIGENCIA ARTIFICIAL
 -------------------------------------------------------------------------------
 Herramienta utilizada: Claude Code (Anthropic), modelo Claude Opus.
 
-Se utilizó como asistente supervisado durante todo el proyecto para:
-  - Leer el enunciado y descomponerlo en requerimientos, preguntas y tareas
-    (tablero de Trello con listas Project Resources, Questions, To Do,
-    In Progress, Code Review y Done).
-  - Proponer la arquitectura POO y las etapas del análisis léxico.
-  - Generar el código Java de cada tarea, que el estudiante revisó,
-    probó y aprobó.
-  - Diseñar y ejecutar las pruebas (carpeta "pruebas").
+Se usó como asistente supervisado para:
+  - Leer el enunciado y dividirlo en requisitos, preguntas y tareas.
+  - Proponer cómo organizar el código y las etapas del análisis léxico.
+  - Escribir el código Java de cada tarea, que el estudiante revisó y probó.
+  - Diseñar y ejecutar las pruebas.
   - Redactar este informe.
 
-Las decisiones de diseño (Q1 a Q6 del tablero) fueron tomadas por el
-estudiante. El código se desarrolló por etapas, cada una en su propia rama
-de Git con su Pull Request, para controlar cada cambio. Cada clase indica
-en su comentario que fue generada con apoyo de IA y revisada por el
-estudiante. El estudiante revisó, comprende y asume la responsabilidad
-total sobre el funcionamiento del sistema.
+Las decisiones de la sección 10 las tomó el estudiante. El trabajo se hizo por
+etapas: cada etapa tiene una tarjeta en Trello y un Pull Request en GitHub
+(ver el repositorio). Cada archivo de código indica en su comentario inicial
+que fue generado con apoyo de IA. El estudiante revisó el código, lo comprende
+y asume la responsabilidad total sobre su funcionamiento.
 
 Prompts principales cuyo resultado se incorporó al proyecto:
-  1. "Vamos a comenzar el desarrollo de un nuevo proyecto para la
-     universidad ... identificar en esta primera etapa los requisitos y
-     estructurar la ruta de trabajo en Trello así como la información que
-     se debe tener clara para el desarrollo tales como funciones
-     específicas o métodos organizacionales" (con el enunciado y el código
-     PHP adjuntos).
-  2. Respuestas a las preguntas Q1-Q6 (por ejemplo: "Q2: Sí, personalmente
-     considero más fácil y entendible ver los errores en una línea...").
+  1. "Vamos a comenzar el desarrollo de un nuevo proyecto para la universidad
+     ... identificar en esta primera etapa los requisitos y estructurar la
+     ruta de trabajo en Trello así como la información que se debe tener
+     clara para el desarrollo" (con el enunciado y el código PHP adjuntos).
+  2. Respuestas a las preguntas de diseño. Por ejemplo: "Personalmente
+     considero más fácil y entendible ver los errores en una línea ... en
+     caso de corregir es más fácil encontrar la línea con error".
   3. "Vamos a trabajarlo de forma sencilla, absolutamente todo lo vamos a
      trabajar en el repositorio ... vas a ir avanzando con el proyecto de
-     forma paulatina con lo que definimos en el Trello como orden e igual
-     vas a explicar cada una de las decisiones que tomas para desarrollar".
-  4. "Desarrolla todo de forma fluida y con total control de la forma más
-     sencilla pero funcional posible, debes hacer múltiples pruebas para
-     estar completamente seguro que todo sirva ... debes considerar que se
-     debe exponer por lo que debes hacerlo sencillo y funcional".
-  5. "Quiero también que recuerdes el pdf que te adjunte junto con el código
-     base ... revises minuciosamente las indicaciones ... además de la
-     rúbrica de evaluación para determinar si es un trabajo completo o hay
-     algún aspecto que se nos está escapando ... si algo falta actualicemos
-     los PR ... y volvamos a hacer pruebas minuciosas y variadas".
+     forma paulatina con lo que definimos en el Trello como orden e igual vas
+     a explicar cada una de las decisiones que tomas".
+  4. "Desarrolla todo de forma fluida ... de la forma más sencilla pero
+     funcional posible, debes hacer múltiples pruebas para estar
+     completamente seguro que todo sirva ... se debe exponer por lo que debes
+     hacerlo sencillo y funcional".
+  5. "Revises minuciosamente las indicaciones que tenemos además de la rúbrica
+     de evaluación para determinar si es un trabajo completo o hay algún
+     aspecto que se nos está escapando".
+  6. "En el repo de GitHub debe estar únicamente lo indispensable ... y en el
+     informe también debe ser limpio y entendible para alguien tanto
+     experimentado como básico, usa lenguaje básico para explicar los pasos".
 
 
-11. FUENTES
+13. FUENTES
 -------------------------------------------------------------------------------
-  - Enunciado "Proyecto 1 - III Cuatrimestre 2026", curso 03307
-    Compiladores, UNED.
-  - Código PHP de prueba provisto por la cátedra (recursos\CodigoProyecto.php).
-  - Documentación oficial de Java (java.util.regex, java.nio.file).
-  No se utilizó código de libros ni de otras fuentes externas.
+  - Enunciado "Proyecto 1 - III Cuatrimestre 2026", curso 03307 Compiladores,
+    UNED.
+  - Código PHP de ejemplo entregado por la cátedra (CodigoProyecto.php).
+  - Documentación oficial de Java.
+No se usó código de libros ni de otras fuentes externas.
