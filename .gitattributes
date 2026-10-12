@@ -1,6 +1,6 @@
 # Codigo fuente y documentacion: normalizar saltos de linea
 *.java text
-*.txt  text
+*.txt  text eol=crlf
 *.md   text
 *.xml  text
 *.properties text
