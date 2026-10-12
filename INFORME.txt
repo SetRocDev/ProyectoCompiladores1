@@ -5,6 +5,7 @@
  Proyecto:     Proyecto 1, III Cuatrimestre 2026
  Estudiante:   Pablo Cortés
  Repositorio:  https://github.com/SetRocDev/ProyectoCompiladores1
+ Control de fujo: https://trello.com/invite/b/6ac4797666a264cc41de73d3/ATTI996458e6e54a45349635f547c161515c85096B7C/proyecto-compiladores
 ===============================================================================
 
  CONTENIDO
@@ -14,13 +15,12 @@
     4. Cómo leer el resultado
     5. Cómo probar que detecta errores
     6. Cómo compilarlo en NetBeans
-    7. Problemas frecuentes y su solución
-    8. Lista de errores que detecta
-    9. Cómo está organizado el código
-   10. Decisiones tomadas
-   11. Limitaciones
-   12. Uso de inteligencia artificial
-   13. Fuentes
+    7. Lista de errores que detecta
+    8. Cómo está organizado el código
+   9. Decisiones tomadas
+   10. Limitaciones
+   11. Uso de inteligencia artificial
+   12. Fuentes
 
 
 1. QUÉ HACE EL PROGRAMA
@@ -39,38 +39,36 @@ El programa revisa un archivo de código PHP y busca errores de escritura
      Ese archivo es una copia del .php con cada línea numerada. Debajo de
      cada línea que tiene un problema aparece el error encontrado.
 
-El programa funciona solo en consola (la ventana negra de comandos). No tiene
-ventanas ni botones.
+El programa funciona solo en consola (CMD). No tiene
+ventanas ni botones o una interfaz grafica.
 
 
 2. QUÉ SE NECESITA
 -------------------------------------------------------------------------------
   - Una computadora con Windows.
-  - Java instalado, versión 8 o más nueva. La mayoría de las computadoras ya
+  - Java instalado, desde la versión 8 o más nueva. La mayoría de las computadoras ya
     lo tienen.
-    Para comprobarlo: abrir el Símbolo del sistema (CMD), escribir
+    Para comprobarlo: abrir el CMD, escribir
         java -version
     y presionar Enter. Debe aparecer un número de versión.
   - Solo para ver o compilar el código: Apache NetBeans 24 o superior.
-
-No se usa ninguna librería externa. El proyecto es de tipo "Java with Ant".
 
 
 3. CÓMO EJECUTARLO (PASO A PASO)
 -------------------------------------------------------------------------------
 El programa ya viene compilado en la carpeta "dist", junto con el archivo PHP
-de ejemplo. No hace falta compilar nada para probarlo.
+de ejemplo. Tras descargar el .zip y descomprimirlo en una carpeta de nombre
+cualquiera se deben seguir estos pasos para su correcta ejecución:
 
   Paso 1. Abrir la carpeta del proyecto y entrar a la carpeta "dist".
           Ahí hay dos archivos:
               ProyectoCompiladores1.jar   (el programa)
-              CodigoProyecto.php          (el código PHP que se va a revisar)
+              CodigoProyecto.php          (el código PHP que se va a revisar, se adjunta el .php base de AprendeU)
 
   Paso 2. Abrir el Símbolo del sistema (CMD) en esa carpeta.
           Forma fácil: en el Explorador de archivos, hacer clic en la barra
-          de direcciones (donde aparece la ruta de la carpeta), escribir
-              cmd
-          y presionar Enter. Se abre una ventana negra ubicada en "dist".
+          de direcciones (donde aparece la ruta de la carpeta), escribir CMD
+          y presionar Enter. Se abrirá el CMD con la ruta del "dist".
 
   Paso 3. Escribir este comando y presionar Enter:
               java -jar ProyectoCompiladores1.jar
@@ -103,7 +101,7 @@ de ejemplo. No hace falta compilar nada para probarlo.
 El archivo "-errores.log" es una copia exacta del .php, con dos agregados:
 
   - Cada línea empieza con su número, de 4 dígitos, y un espacio.
-  - Si una línea tiene un error, el error aparece en el renglón de abajo, con
+  - Si una línea tiene un error, el error aparece en el renglón de abajito, con
     este formato:   Error NÚMERO. Descripción
 
 Ejemplo de una línea con dos errores:
@@ -141,7 +139,6 @@ de cierre ?>) aparecen al final del archivo.
 
 6. CÓMO COMPILARLO EN NETBEANS
 -------------------------------------------------------------------------------
-Este paso es opcional: el programa ya viene compilado en "dist".
 
   1. Abrir NetBeans.
   2. Menú File > Open Project y elegir la carpeta del proyecto.
@@ -154,32 +151,7 @@ Este paso es opcional: el programa ya viene compilado en "dist".
   5. Ejecutar como se explica en la sección 3.
 
 
-7. PROBLEMAS FRECUENTES Y SU SOLUCIÓN
--------------------------------------------------------------------------------
-  "java" no se reconoce como un comando
-     La computadora no encuentra Java. Se puede usar el Java que trae
-     NetBeans, escribiendo la ruta completa entre comillas:
-     "C:\Program Files\Apache NetBeans\jdk\bin\java" -jar ProyectoCompiladores1.jar
-
-  Aparece: Error 101. No se encontro ningun archivo con extension .php
-     No hay ningún archivo .php en la carpeta "dist". Copiar ahí el archivo
-     recursos\CodigoProyecto.php y ejecutar de nuevo.
-
-  Aparece: Error 102. El archivo '...' no tiene la extension exacta .php
-     Es solo un aviso. El programa revisa únicamente archivos que terminan
-     en ".php" en minúscula. Un archivo ".PHP" o ".php.txt" no se revisa.
-
-  En la ventana de comandos las palabras salen sin tildes
-     Es a propósito. La ventana de comandos de Windows no siempre muestra
-     bien las tildes, así que ahí se escriben sin tilde. En el archivo .log
-     las tildes sí aparecen.
-
-  Compilé en NetBeans y ya no está el archivo PHP en "dist"
-     Es normal: "Clean and Build" vacía la carpeta. Copiar de nuevo
-     recursos\CodigoProyecto.php a "dist".
-
-
-8. LISTA DE ERRORES QUE DETECTA
+7. LISTA DE ERRORES QUE DETECTA
 -------------------------------------------------------------------------------
   Sobre el archivo (se muestran en la ventana de comandos)
     101  No hay ningún archivo .php en la carpeta
@@ -214,7 +186,7 @@ Este paso es opcional: el programa ya viene compilado en "dist".
     502  Texto entre comillas sin cerrar            Ejemplo: echo "hola;
 
 
-9. CÓMO ESTÁ ORGANIZADO EL CÓDIGO
+8. CÓMO ESTÁ ORGANIZADO EL CÓDIGO
 -------------------------------------------------------------------------------
 El código está en la carpeta  src\proyectocompiladores1  y se divide en cuatro
 grupos (paquetes). Cada archivo cumple una sola tarea.
@@ -255,17 +227,18 @@ Orden en que trabaja el programa con cada archivo .php:
           ->  escribir el archivo .log
 
 
-10. DECISIONES TOMADAS
+9. DECISIONES TOMADAS
 -------------------------------------------------------------------------------
   - Archivos que se revisan: todos los que terminan en ".php" y están junto
     al programa. Así no depende de un nombre ni de una ruta fija.
-  - Dónde se muestran los errores: debajo de la línea donde ocurren (Opción 1
-    del enunciado), porque es más fácil de corregir.
+  - Dónde se muestran los errores: debajo de la línea donde ocurren, 
+    porque es más fácil de corregir (o al menos a gusto personal así lo es).
   - Numeración: 4 dígitos y un espacio. Ejemplo: "0001 <?php"
   - Mayúsculas y minúsculas en las variables: $total y $Total son dos
     variables distintas.
   - Palabras reservadas: no se distinguen mayúsculas, porque en PHP "IF" y
-    "if" son la misma palabra. Por eso $if, $If y $IF son error.
+    "if" son la misma palabra. Por eso $if, $If y $IF son error. (o eso fue lo 
+    que entendi sobre como manejar las mayusculas para el proyecto)
   - La regla de palabras reservadas se aplica a la variable que está a la
     izquierda del signo "=". Los signos "==", ">=", "<=" y "!=" son
     comparaciones, no asignaciones.
@@ -278,7 +251,7 @@ Orden en que trabaja el programa con cada archivo .php:
     .log sí se conservan.
 
 
-11. LIMITACIONES
+10. LIMITACIONES
 -------------------------------------------------------------------------------
   - Solo se revisan comentarios de una línea (// y #), como pide el enunciado.
     Los comentarios de varias líneas /* */ no se reconocen.
@@ -292,51 +265,24 @@ Orden en que trabaja el programa con cada archivo .php:
     no lo reporta, porque eso no es un error léxico.
 
 
-12. USO DE INTELIGENCIA ARTIFICIAL
+11. USO DE INTELIGENCIA ARTIFICIAL
 -------------------------------------------------------------------------------
 Herramienta utilizada: Claude Code (Anthropic), modelo Claude Opus.
 
 Se usó como asistente supervisado para:
   - Leer el enunciado y dividirlo en requisitos, preguntas y tareas.
   - Proponer cómo organizar el código y las etapas del análisis léxico.
-  - Escribir el código Java de cada tarea, que el estudiante revisó y probó.
+  - Escribir el código Java de cada tarea, que el estudiante revisó y probó
+    controlado por GitHub con los diferentes PR (Pull Request).
   - Diseñar y ejecutar las pruebas.
-  - Redactar este informe.
 
-Las decisiones de la sección 10 las tomó el estudiante. El trabajo se hizo por
-etapas: cada etapa tiene una tarjeta en Trello y un Pull Request en GitHub
-(ver el repositorio). Cada archivo de código indica en su comentario inicial
-que fue generado con apoyo de IA. El estudiante revisó el código, lo comprende
-y asume la responsabilidad total sobre su funcionamiento.
-
-Prompts principales cuyo resultado se incorporó al proyecto:
-  1. "Vamos a comenzar el desarrollo de un nuevo proyecto para la universidad
-     ... identificar en esta primera etapa los requisitos y estructurar la
-     ruta de trabajo en Trello así como la información que se debe tener
-     clara para el desarrollo" (con el enunciado y el código PHP adjuntos).
-  2. Respuestas a las preguntas de diseño. Por ejemplo: "Personalmente
-     considero más fácil y entendible ver los errores en una línea ... en
-     caso de corregir es más fácil encontrar la línea con error".
-  3. "Vamos a trabajarlo de forma sencilla, absolutamente todo lo vamos a
-     trabajar en el repositorio ... vas a ir avanzando con el proyecto de
-     forma paulatina con lo que definimos en el Trello como orden e igual vas
-     a explicar cada una de las decisiones que tomas".
-  4. "Desarrolla todo de forma fluida ... de la forma más sencilla pero
-     funcional posible, debes hacer múltiples pruebas para estar
-     completamente seguro que todo sirva ... se debe exponer por lo que debes
-     hacerlo sencillo y funcional".
-  5. "Revises minuciosamente las indicaciones que tenemos además de la rúbrica
-     de evaluación para determinar si es un trabajo completo o hay algún
-     aspecto que se nos está escapando".
-  6. "En el repo de GitHub debe estar únicamente lo indispensable ... y en el
-     informe también debe ser limpio y entendible para alguien tanto
-     experimentado como básico, usa lenguaje básico para explicar los pasos".
+Yo Pablo Cortes me encargue de supervisar cada etapa del proceso asi como el código generado, por lo que a su vez asumo haberlo entendido, comprendido y analizado previo a hacer la entrega y asumo la responsabilidad total sobre el funcionamiento
 
 
-13. FUENTES
+12. FUENTES
 -------------------------------------------------------------------------------
   - Enunciado "Proyecto 1 - III Cuatrimestre 2026", curso 03307 Compiladores,
     UNED.
   - Código PHP de ejemplo entregado por la cátedra (CodigoProyecto.php).
   - Documentación oficial de Java.
-No se usó código de libros ni de otras fuentes externas.
+
