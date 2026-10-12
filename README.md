@@ -68,7 +68,7 @@ El proyecto se hizo por etapas. Cada etapa tiene una tarjeta en Trello y un *Pul
 | T10 | Unión de todas las partes y ejecución del `.jar` | [#10](../../pull/10) |
 | T11 | Archivos de prueba | [#11](../../pull/11) |
 | T12 | INFORME y documentación | [#12](../../pull/12) |
-| T13 | Compatibilidad con Java 8 y preparación de la entrega | [#13](../../pull/13), [#14](../../pull/14) |
+| T13 | Compatibilidad con Java 8 y preparación de la entrega | [#13](../../pull/13), [#14](../../pull/14), [#15](../../pull/15) |
 
 - Todos los Pull Requests: [lista completa](../../pulls?q=is%3Apr+is%3Amerged)
 - Historial de cambios: [commits](../../commits/main)
