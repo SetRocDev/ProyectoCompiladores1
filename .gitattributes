@@ -12,3 +12,6 @@
 *.php -text
 *.PHP -text
 *.php.txt -text
+
+# El programa compilado (.jar) se guarda tal cual
+*.jar binary
